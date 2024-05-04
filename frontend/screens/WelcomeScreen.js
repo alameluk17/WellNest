@@ -18,7 +18,7 @@ import languages from "../constants/language";
 //   selectedLanguage
 // );
 
-const translatedRegister = useTranslation("Register", "eng_Latn", selectedLanguage);
+//const translatedRegister = useTranslation("Register", "eng_Latn", selectedLanguage);
 
 const WelcomeScreen = ({ navigation }) => {
   const [selectedLanguage, setSelectedLanguage] = useState("en");

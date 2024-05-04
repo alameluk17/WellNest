@@ -2,7 +2,7 @@ import json
 from fastapi import FastAPI, HTTPException, Request
 from typing import List
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials, db, firestore
 import datetime
 from email.mime.text import MIMEText
 import smtplib
@@ -161,4 +161,65 @@ async def GenerateMedReport(request: Request):
 
 
     return {"message": "Files downloaded successfully."}
+
+
+# Define FastAPI endpoint
+
+#from fastapi.responses import JSONResponse
+
+# consider frontend api request format
+# @app.get("/emergency")
+# async def get_emergency_emails(user_email: str):
+#     try:
+#         db = firestore.client()
+#         email_set = set()
+
+#         patients_ref = db.collection("Patients").stream()
+#         for doc in patients_ref:
+#             data = doc.to_dict()
+#             if data.get("email") == user_email:
+#                 emergency_contacts = data.get("emergencyContacts", [])
+#                 for contact in emergency_contacts:
+#                     email = contact.get("email")
+#                     if email:
+#                         email_set.add(email)
+
+#         return JSONResponse(content={"emails": list(email_set)})
+    
+#     except Exception as e:
+#         return JSONResponse(content={"error": str(e)})
+
+
+@app.get("/emergency")
+async def get_emergency_emails(user_email: str):
+    
+    try:
+        db = firestore.client()
+        # Initialize a set to store unique email IDs
+        email_set = set()
+
+        # Iterate through all patient documents
+        patients_ref = db.collection("Patients").stream()
+        for doc in patients_ref:
+            # print(doc)
+            data = doc.to_dict()
+            # print(data)
+            print(data.get("email"))
+            if data.get("email") == user_email:
+                
+                emergency_contacts = data.get("emergencyContacts", [])
+                
+            # Iterate through emergency contacts for each patient
+                for contact in emergency_contacts:
+                    print(contact)
+                    email = contact.get("emailICE")
+                    if email:
+                        email_set.add(email)
+
+        # Convert the set to a list and return
+        print(email_set)
+        return {"emergency_contacts":email_set}
+    
+    except Exception as e:
+        return {"error": str(e)}
 

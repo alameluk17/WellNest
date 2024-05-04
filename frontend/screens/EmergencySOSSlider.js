@@ -1,29 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Modal } from 'react-native';
+import { useUser } from "../database/UserContext"
 
 const EmergencySOSSlider = () => {
-  const slideX = useRef(new Animated.Value(0)).current;
-  const [sosActivated, setSOSActivated] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [remainingTime, setRemainingTime] = useState(10);
+  const {userEmail} = useUser ()
 
   const handleCancelSOS = () => {
-    setSOSActivated(false);
     setShowTimerModal(false);
-    Animated.spring(slideX, {
-      toValue: 0,
-      useNativeDriver: true,
-    }).start();
   };
 
   const handleSlideComplete = () => {
-    setSOSActivated(true);
     setShowTimerModal(true);
-    Animated.timing(slideX, {
-      toValue: -400, // Slide fully to the left
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
 
     // Start countdown
     let timer = setInterval(() => {
@@ -34,10 +23,20 @@ const EmergencySOSSlider = () => {
     setTimeout(() => {
       clearInterval(timer);
       setShowTimerModal(false);
-      // Perform action after 10 seconds (e.g., make emergency call)
       console.log('Emergency call initiated!');
-    }, 10000);
-  };
+      
+      // try {
+      //     const response = await fetch(`http://localhost:8000/emergency?user_email=${userEmail}`);
+      //     const data = await response.json();
+      //     console.log(data.emails);
+      //     // Perform further actions with the received email data
+      // } catch (error) {
+      //     console.error('Error fetching emergency emails:', error);
+      // }
+  }, 10000);
+  
+
+
 
   useEffect(() => {
     // Reset remaining time when modal is shown
@@ -48,23 +47,6 @@ const EmergencySOSSlider = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-      style={[
-        styles.slider,
-        {
-          transform: [
-            {
-              translateX: slideX.interpolate({
-                inputRange: [0, -400], // Corrected inputRange
-                outputRange: [0, -400],
-                extrapolate: 'clamp',
-              }),
-            },
-          ],
-        },
-      ]}
-    />
-
       <Text style={styles.label}>Slide to activate SOS</Text>
       <Modal visible={showTimerModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
@@ -80,20 +62,12 @@ const EmergencySOSSlider = () => {
     </View>
   );
 };
-
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  slider: {
-    width: 100,
-    height: 50,
-    backgroundColor: 'red',
-    borderRadius: 25,
-    position: 'absolute',
-    left: 0,
   },
   label: {
     fontSize: 16,
@@ -112,11 +86,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'black',
   },
   modalText: {
     fontSize: 20,
     marginBottom: 20,
+    color: "white"
   },
   cancelButton: {
     backgroundColor: 'red',
