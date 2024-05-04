@@ -196,7 +196,7 @@ async def get_emergency_emails(user_email: str):
     try:
         db = firestore.client()
         # Initialize a set to store unique email IDs
-        email_set = set()
+        email_set = []
 
         # Iterate through all patient documents
         patients_ref = db.collection("Patients").stream()
@@ -214,7 +214,7 @@ async def get_emergency_emails(user_email: str):
                     print(contact)
                     email = contact.get("emailICE")
                     if email:
-                        email_set.add(email)
+                        email_set.append(email)
 
         # Convert the set to a list and return
         print(email_set)
@@ -224,8 +224,7 @@ async def get_emergency_emails(user_email: str):
         smtp_username = 'heera2110382@ssn.edu.in'
         smtp_password = 'qoetosqebaqlgwbc'
 
-        print(email_set)
-        for email in email_set['emergency_contacts']:
+        for email in email_set:
             msg = MIMEText('\n\nYour loved one has an emergency. Please contact them and make sure they are feeling okay. We will also try our best to contact them. ' )
             msg['Subject'] = 'SOS Request'
             msg['From'] = smtp_username
