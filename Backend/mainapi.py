@@ -218,6 +218,25 @@ async def get_emergency_emails(user_email: str):
 
         # Convert the set to a list and return
         print(email_set)
+
+        smtp_server = 'smtp.gmail.com'
+        smtp_port = 587
+        smtp_username = 'heera2110382@ssn.edu.in'
+        smtp_password = 'qoetosqebaqlgwbc'
+
+        print(email_set)
+        for email in email_set['emergency_contacts']:
+            msg = MIMEText('\n\nYour loved one has an emergency. Please contact them and make sure they are feeling okay. We will also try our best to contact them. ' )
+            msg['Subject'] = 'SOS Request'
+            msg['From'] = smtp_username
+            msg['To'] = email
+
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
+                server.starttls()
+                server.login(smtp_username, smtp_password)
+                server.send_message(msg)
+
+        return {"message": "SOS emails."}
         return {"emergency_contacts":email_set}
     
     except Exception as e:
