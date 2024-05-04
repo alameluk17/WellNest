@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+.venv
+client_secret_116312500388-550418vbbhv0kq1p8iq8rjevc5bhoaai.apps.googleusercontent.com.json
+Backend/client_secrets.json
+Backend/credentials.json
+Backend/token.json
+Backend/wellnest.json
+__pycache__
