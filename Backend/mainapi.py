@@ -14,7 +14,7 @@ from firebase_admin import credentials, storage
 import MedReportGenerator
 import shutil
 import os
-from datetime import datetime, timedelta
+from datetime import  timedelta
 
 app = FastAPI()
 cred = credentials.Certificate(".\wellnest.json")
@@ -102,7 +102,7 @@ async def send_appointment_request(request: Request):
         body = await request.body()
         body = json.loads(body)
         input_time = body["input_time"]
-        
+        user_email = body["user_email"]
         logging.info(f"Received input_time: {input_time}")
 
         return get_doctors_and_send_email(input_time)
@@ -132,7 +132,7 @@ async def GenerateMedReport(request: Request):
     blobs = bucket.list_blobs(prefix=user_email)
 
     # Define the cutoff date (three months ago)
-    cutoff_date = datetime.now() - timedelta(days=90)
+    cutoff_date = datetime.datetime.now() - timedelta(days=90)
 
     # Define a directory to save the files locally
     save_directory = "./Temp"
@@ -145,7 +145,7 @@ async def GenerateMedReport(request: Request):
         # Extract file name and creation date
         file_name = blob.name.split('/')[-1]
         creation_date_str = file_name.split('_')[0]
-        creation_date = datetime.strptime(creation_date_str, '%d-%m-%Y')
+        creation_date = datetime.datetime.strptime(creation_date_str, '%d-%m-%Y')
 
         # Check if file is within the last three months
         if creation_date >= cutoff_date:
