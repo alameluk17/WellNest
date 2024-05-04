@@ -1,11 +1,38 @@
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
-import React from "react";
+import React, {useState} from "react";
+import { Picker } from "@react-native-picker/picker";
 import { LinearGradient } from "expo-linear-gradient";
+
 import Button from "../components/Button";
+import languages from "../constants/language";
+
+// const translatedWelcomeBack = useTranslation(
+//   "Welcome back",
+//   "en",
+//   selectedLanguage
+// );
+// const translatedLogin = useTranslation("Login", "en", selectedLanguage);
+// const translatedDontHaveAccount = useTranslation(
+//   "Don't have an account?",
+//   "en",
+//   selectedLanguage
+// );
+
+const translatedRegister = useTranslation("Register", "eng_Latn", selectedLanguage);
 
 const WelcomeScreen = ({ navigation }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
   return (
     <LinearGradient style={styles.container} colors={["#2b88c5", "#FFFFFF"]}>
+      <Picker
+        selectedValue={selectedLanguage}
+        onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
+        style={styles.picker}
+      >
+        {Object.entries(languages).map(([label, value]) => (
+          <Picker.Item key={value} label={label} value={value} />
+        ))}
+      </Picker>
       <Image
         source={require("../assets/images/logo.png")}
         style={styles.logo}

@@ -5,14 +5,15 @@ import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD2XLcsAeOFRxhPtRpyVx3xdpjOjle9nLE",
-    authDomain: "codher-2024-wellnest.firebaseapp.com",
-    projectId: "codher-2024-wellnest",
-    storageBucket: "codher-2024-wellnest.appspot.com",
-    messagingSenderId: "920541261855",
-    appId: "1:920541261855:web:ff73ad38e5c8f51a5ce52a",
-    measurementId: "G-3PESVFY06Q"
-  };
+  apiKey: "AIzaSyDs-ew4gvL6vGOk6ygmeg8zR-xzGpN1Htw",
+  authDomain: "wellnest-ab850.firebaseapp.com",
+  databaseURL: "https://wellnest-ab850-default-rtdb.firebaseio.com",
+  projectId: "wellnest-ab850",
+  storageBucket: "wellnest-ab850.appspot.com",
+  messagingSenderId: "424293342157",
+  appId: "1:424293342157:web:6af80627c2c498b5808284",
+  measurementId: "G-YMWGRMVYSW"
+};
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
