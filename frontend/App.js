@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen';
+import HomeScreen from './screens/HomeScreen';
 import { UserProvider } from "./database/UserContext";
 
 
@@ -37,6 +38,11 @@ export default function App() {
           <Stack.Screen
               name="Auth"
               component={AuthStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
               options={{ headerShown: false }}
             />
         </Stack.Navigator>
