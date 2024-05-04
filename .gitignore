@@ -136,3 +136,4 @@ Backend/credentials.json
 Backend/token.json
 Backend/wellnest.json
 __pycache__
+Backend/env
