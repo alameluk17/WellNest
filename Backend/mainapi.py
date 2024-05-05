@@ -101,6 +101,8 @@ def get_doctors_and_send_email(input_time: str):
 
 import logging
 
+from fastapi.responses import JSONResponse
+
 @app.post("/send-appointment-request")
 async def send_appointment_request(request: Request):
     try:
@@ -110,10 +112,26 @@ async def send_appointment_request(request: Request):
         user_email = body["user_email"]
         logging.info(f"Received input_time: {input_time}")
 
-        return get_doctors_and_send_email(input_time)
+        # Call function to get doctors and send email
+        result = get_doctors_and_send_email(input_time)
+
+        # Construct response JSON
+        response_data = {
+            "success": True,
+            "message": "Appointment request sent successfully",
+            "data": result  # You can include any additional data here
+        }
+
+        return JSONResponse(content=response_data)
     except Exception as e:
         logging.error(f"Error occurred: {e}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        error_response = {
+            "success": False,
+            "message": "Failed to send appointment request",
+            "error": str(e)
+        }
+        return JSONResponse(content=error_response, status_code=500)
+
 
     
 def list_files_in_folder(folder_path):

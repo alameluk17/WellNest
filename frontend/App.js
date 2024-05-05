@@ -15,9 +15,6 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen';
 
 
-import HomeScreen from './screens/HomeScreen';
-import EmergencySOSSlider from './screens/EmergencySOSSlider';
-
 import SOSSliderScreen from './screens/SOSSliderScreen';
 import TeleconsultScreen from './screens/TeleconsultScreen';
 import MedRemindersScreen from './screens/MedsRemindersScreen';
@@ -25,6 +22,8 @@ import UploadVitalsFilesScreen from './screens/UploadVitalsFilesScreen';
 
 import SOSTimerScreen from './screens/SOSTimerScreen';
 import NotifyingContacts from './screens/NotifyingContacts';
+
+import Vitals from './screens/VitalsForm';
 
 
 
@@ -143,6 +142,11 @@ export default function App() {
             <Stack.Screen 
               name = "NotifyingContacts"
               component = {NotifyingContacts}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen 
+              name = "Vitals"
+              component = {Vitals}
               options={{headerShown: false}}
             />
         </Stack.Navigator>
