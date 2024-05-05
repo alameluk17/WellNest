@@ -4,7 +4,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { getStorage, ref, uploadBytes } from 'firebase/storage'; 
 import { useUser } from "../database/UserContext";
 
-export default function UploadFilesScreen({ navigation }) {
+export default function UploadVitalsFilesScreen({ navigation }) {
   const { userEmail } = useUser();
   const storage = getStorage();
 
@@ -18,8 +18,10 @@ export default function UploadFilesScreen({ navigation }) {
 
       if (result && !result.cancelled) {
         const assets = result.assets[0];
-        const uri = assets.uri;
-        const name = `${formattedDate}_${folderName}`;
+        const uri = assets.uri
+        const filename = assets.name
+        // const extension = uri.split('.').pop(); // Get file extension from URI
+        const name = `${formattedDate}_${folderName}_${filename}`; // Append extension to name
         const folderRef = ref(storage, userEmail + '/' + folderName + '/' + name);
         const response = await fetch(uri);
         const blob = await response.blob();
