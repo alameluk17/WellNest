@@ -35,6 +35,9 @@ export default function UploadVitalsFilesScreen({ navigation }) {
 
   return (
     <>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.navigate("Vitals")}>
+        <Text style={styles.buttonText}>Track Vitals Today!</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.buttonContainer} onPress={() => handlePickDocument('prescriptions')}>
         <Text style={styles.buttonText}>Upload Prescription</Text>
       </TouchableOpacity>
