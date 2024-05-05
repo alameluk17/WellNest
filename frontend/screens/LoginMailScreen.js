@@ -19,7 +19,7 @@ export default function LoginMailScreen({navigation}){
             // Reset the navigation stack and navigate to HomeScreen
             navigation.reset({
               index: 0,
-              routes: [{ name: "Home" }],
+              routes: [{ name: "HomeTabs" }],
             });
           }
         });
