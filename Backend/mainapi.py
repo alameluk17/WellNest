@@ -1,5 +1,7 @@
+import base64
 import json
-from fastapi import FastAPI, HTTPException, Request, UploadFile, File
+import tempfile
+from fastapi import FastAPI, HTTPException, Request, UploadFile,File
 from typing import List
 import firebase_admin
 from firebase_admin import credentials, db, firestore
@@ -32,7 +34,7 @@ firebase_admin.initialize_app(cred, {
 SCOPES = ['https://www.googleapis.com/auth/meetings.space.created']
 
 MedReportModel = MedReportGenerator.CreateMedReportGenerator()
-# PrescriptionReaderModel = PrescriptionReader.PrescriptionJSONGenerator()
+PrescriptionReaderModel = PrescriptionReader.PrescriptionJSONGenerator()
 
 def time_in_range(start, end, current):
     """Returns whether current is in the range [start, end]"""
@@ -184,10 +186,14 @@ async def GenerateMedReport(request: Request):
     print(files)
     response = MedReportGenerator.FilestoReport(files,MedReportModel)
     print(type(response))
-    # shutil.rmtree("./Temp")
+    print(response.text)
+    shutil.rmtree("./Temp")
 
+    f = open("../MedReport/5-5-2024_MedReport.txt","w")
+    f.write(response.text)
+    f.close()
 
-    return {"message": "Files downloaded successfully."}
+    return {"message": response.text}
 
 
 # Define FastAPI endpoint
@@ -252,7 +258,7 @@ async def get_emergency_emails(user_email: str, gps_location: str):
         smtp_password = 'qoetosqebaqlgwbc'
 
         for email in email_set:
-            msg = MIMEText('\n\nYour loved one has an emergency. Please contact them and make sure they are feeling okay. We will also try our best to contact them. ' )
+            msg = MIMEText('\n\nYour loved one has an emergency. Please contact them and make sure they are feeling okay. We will also try our best to contact them. They are requesting for help from the location :'+gps_location )
             msg['Subject'] = 'SOS Request'
             msg['From'] = smtp_username
             msg['To'] = email
@@ -273,24 +279,3 @@ async def CreateJSONPrescription(request : Request):
     jsonip = json.loads(body)
     image = jsonip["prescription_image"]
 
-
-PrescriptionReaderModel = PrescriptionReader.PrescriptionJSONGenerator()
-@app.post("/upload-image")
-async def upload_image(file: UploadFile = File(...)):
-    try:
-        current_directory = os.getcwd()     
-        filename = "uploaded_image.jpg"
-        save_path = os.path.join(current_directory, filename)
-        
-        with open(save_path, "wb") as f:
-            shutil.copyfileobj(file.file, f)
-        print("hello")
-        prescription_json = PrescriptionReader.generate_response_from_image(PrescriptionReaderModel,"./uploaded_image.jpg")
-        print(prescription_json)
-        return {"data":prescription_json}
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-
-
-    
