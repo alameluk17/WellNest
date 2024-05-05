@@ -1,3 +1,5 @@
+import csv
+import os
 import PyPDF2
 import pathlib
 import textwrap
@@ -76,8 +78,18 @@ def FilestoReport(files,model):
     f = open("ConsolidatedFile.txt","w",encoding="utf-8")
     for i in files:
         print(i)
+        split_tup = os.path.splitext(i)
         f.write("Name Of File :"+i+"\n")
-        s = read_pdf(i)
+        s=""
+        if split_tup[1] == ".pdf":
+            s = read_pdf(i)
+        elif split_tup[1] == ".csv":
+            csvFile = csv.reader(i)
+            for lines in csvFile:
+                s = s +str(lines)+"/n"
+        else:
+            g = open(i,"r")
+            s= g.read()
         f.write(s)
         f.write("\n\n")
         

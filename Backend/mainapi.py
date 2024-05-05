@@ -12,6 +12,7 @@ from google.apps import meet_v2
 import firebase_admin
 from firebase_admin import credentials, storage
 import MedReportGenerator
+import PrescriptionReader
 import shutil
 import os
 from datetime import  timedelta
@@ -26,6 +27,7 @@ firebase_admin.initialize_app(cred, {
 SCOPES = ['https://www.googleapis.com/auth/meetings.space.created']
 
 MedReportModel = MedReportGenerator.CreateMedReportGenerator()
+# PrescriptionReaderModel = PrescriptionReader.PrescriptionJSONGenerator()
 
 def time_in_range(start, end, current):
     """Returns whether current is in the range [start, end]"""
@@ -144,19 +146,23 @@ async def GenerateMedReport(request: Request):
     for blob in blobs:
         # Extract file name and creation date
         file_name = blob.name.split('/')[-1]
-        creation_date_str = file_name.split('_')[0]
-        creation_date = datetime.datetime.strptime(creation_date_str, '%d-%m-%Y')
+        if file_name != "vitals.csv":
+            creation_date_str = file_name.split('_')[0]
+            creation_date = datetime.datetime.strptime(creation_date_str, '%d-%m-%Y')
 
-        # Check if file is within the last three months
-        if creation_date >= cutoff_date:
-            # Download the file
+            # Check if file is within the last three months
+            if creation_date >= cutoff_date:
+                # Download the file
+                local_file_path = os.path.join(save_directory, file_name)
+                blob.download_to_filename(local_file_path)
+        else:
             local_file_path = os.path.join(save_directory, file_name)
             blob.download_to_filename(local_file_path)
 
     files = list_files_in_folder("./Temp")
     print(files)
     response = MedReportGenerator.FilestoReport(files,MedReportModel)
-    print(response)
+    print(type(response))
     # shutil.rmtree("./Temp")
 
 
@@ -240,4 +246,10 @@ async def get_emergency_emails(user_email: str):
     
     except Exception as e:
         return {"error": str(e)}
+
+@app.post("/CreateJSONPrescription")
+async def CreateJSONPrescription(request : Request):
+    body = await request.body()
+    jsonip = json.loads(body)
+    image = jsonip["prescription_image"]
 
