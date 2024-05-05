@@ -34,18 +34,28 @@ export default function App() {
   const sendEmergencyRequest = async (userEmail, location) => {
     try {
         console.log(location)
-      const str_loc = JSON.stringify(location)
-      const response = await ky.get('http://192.168.29.162:8000/emergency', {
-        searchParams: {
-          user_email: userEmail,
-          gps_location: str_loc
-        },
+        const str_loc = JSON.stringify(location)
+        const response = await ky.get('http://192.168.29.162:8000/emergency', {
+          searchParams: {
+            user_email: userEmail,
+            gps_location: str_loc
+          },
         headers: {
           'Content-Type': 'application/json',
         },
       }).json();
-  
-      console.log(response); 
+
+    //   const res = await ky.post('http://192.168.29.162:8000/GenerateMedReport', {
+    //     json: {
+    //         user_email: userEmail,
+    //     },
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    // }).json();
+
+    // console.log(res);
+    console.log(response)
     } catch (error) {
       console.error(error);
     }
