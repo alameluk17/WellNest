@@ -85,7 +85,7 @@ def generate_response_from_image(model, image_path):
 #         genai.delete_file(name=uploaded_file.name)
     
     print(response)
-    return response
+    return response.text
 
 # model = PrescriptionJSONGenerator()
 # generate_response_from_image(model,"C:/Users/alamu/Documents/CodHer/WellNest/Backend/Temp/samplepres.png")
