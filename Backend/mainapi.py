@@ -1,5 +1,5 @@
 import json
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from typing import List
 import firebase_admin
 from firebase_admin import credentials, db, firestore
@@ -17,6 +17,10 @@ import shutil
 import os
 from datetime import  timedelta
 from pydantic import BaseModel
+import tempfile
+import logging
+from fastapi.responses import JSONResponse
+
 
 app = FastAPI()
 cred = credentials.Certificate(".\wellnest.json")
@@ -97,9 +101,7 @@ def get_doctors_and_send_email(input_time: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-import logging
 
-from fastapi.responses import JSONResponse
 
 @app.post("/send-appointment-request")
 async def send_appointment_request(request: Request):
@@ -271,3 +273,24 @@ async def CreateJSONPrescription(request : Request):
     jsonip = json.loads(body)
     image = jsonip["prescription_image"]
 
+
+PrescriptionReaderModel = PrescriptionReader.PrescriptionJSONGenerator()
+@app.post("/upload-image")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        current_directory = os.getcwd()     
+        filename = "uploaded_image.jpg"
+        save_path = os.path.join(current_directory, filename)
+        
+        with open(save_path, "wb") as f:
+            shutil.copyfileobj(file.file, f)
+        print("hello")
+        prescription_json = PrescriptionReader.generate_response_from_image(PrescriptionReaderModel,"./uploaded_image.jpg")
+        print(prescription_json)
+        return {"data":prescription_json}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+
+    

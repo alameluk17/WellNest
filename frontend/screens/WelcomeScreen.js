@@ -24,7 +24,7 @@ const WelcomeScreen = ({ navigation }) => {
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   return (
     <LinearGradient style={styles.container} colors={["#2b88c5", "#FFFFFF"]}>
-      <Picker
+      {/* <Picker
         selectedValue={selectedLanguage}
         onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
         style={styles.picker}
@@ -32,7 +32,7 @@ const WelcomeScreen = ({ navigation }) => {
         {Object.entries(languages).map(([label, value]) => (
           <Picker.Item key={value} label={label} value={value} />
         ))}
-      </Picker>
+      </Picker> */}
       <Image
         source={require("../assets/images/logo.png")}
         style={styles.logo}
