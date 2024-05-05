@@ -6,9 +6,9 @@ import google.ai.generativelanguage as glm
 from google.api_core import retry
 import json
 # importing necessary functions from dotenv library
-from dotenv import load_dotenv, dotenv_values 
+# from dotenv import load_dotenv, dotenv_values 
 # loading variables from .env file
-load_dotenv() 
+# load_dotenv() 
 
 def CreateMedReportGenerator():
 
@@ -42,7 +42,7 @@ def CreateMedReportGenerator():
 
     system_instruction = "You are a medical summarization tool aimed at assisting healthcare professionals in quickly reviewing patient records. The tool will take the contents of a file as input, which contains various medical reports, prescriptions, and documents related to a patient's medical history. The goal is to generate a concise and informative medical summary in the form of bullet points. The medical summary should include key information extracted from the input file, such as: Patient demographics (age, gender, etc.). Medical history (chronic conditions, past surgeries, allergies, etc.). Current medications and dosages. Laboratory test results (blood tests, imaging scans, etc.). Diagnosis and treatment plans. Recommendations and follow-up instructions. The summary should be organized logically and prioritize critical information. It should also be formatted for quick readability, using bullet points to highlight key details. Additionally, the tool should ensure patient confidentiality and comply with healthcare data security regulations. Given the input file containing diverse medical documents, the system should process the information efficiently, identify relevant data points, and generate an accurate and comprehensive medical summary.\n\n"
 
-    model = genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
+    model =genai.GenerativeModel(model_name="gemini-1.5-pro-latest",
                                 generation_config=generation_config,
                                 system_instruction=system_instruction,
                                 safety_settings=safety_settings)
